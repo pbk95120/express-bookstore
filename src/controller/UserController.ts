@@ -8,8 +8,13 @@ dotenv.config();
 
 const join = (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const sql = "INSERT INTO users (email, password) VALUES (?, ?)";
-  let values = [email, password];
+
+  const sql = "INSERT INTO users (email, password, salt) VALUES (?, ?, ?)";
+  const salt = crypto.randomBytes(10).toString("base64");
+  const hashPassword = crypto
+    .pbkdf2Sync(password, salt, 100000, 10, "sha512")
+    .toString("base64");
+  const values = [email, hashPassword, salt];
 
   conn.query(sql, values, (err, results) => {
     if (err) {
@@ -24,14 +29,18 @@ const join = (req: Request, res: Response) => {
 const login = (req: Request, res: Response) => {
   const { email, password } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";
+
   conn.query(sql, email, (err, results: any) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
     const loginUser = results[0];
+    const hashPassword = crypto
+      .pbkdf2Sync(password, loginUser.salt, 100000, 10, "sha512")
+      .toString("base64");
 
-    if (loginUser && loginUser.password === password.toString()) {
+    if (loginUser && loginUser.password === hashPassword) {
       const token = jwt.sign(
         {
           email: loginUser.email,
@@ -51,6 +60,7 @@ const login = (req: Request, res: Response) => {
 const passwordResetRequest = (req: Request, res: Response) => {
   const { email } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";
+
   conn.query(sql, email, (err, results: any) => {
     if (err) {
       console.log(err);
@@ -69,8 +79,13 @@ const passwordResetRequest = (req: Request, res: Response) => {
 
 const passwordReset = (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const sql = "UPDATE users SET password = ? WHERE email = ?";
-  const values = [password, email];
+  const sql = "UPDATE users SET password = ?, salt = ? WHERE email = ?";
+  const salt = crypto.randomBytes(10).toString("base64");
+  const hashPassword = crypto
+    .pbkdf2Sync(password, salt, 100000, 10, "sha512")
+    .toString("base64");
+  const values = [hashPassword, salt, email];
+
   conn.query(sql, values, (err, results: any) => {
     if (err) {
       console.log(err);
