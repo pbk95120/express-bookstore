@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import conn from "../database/mariadb";
 import jwt from "jsonwebtoken";
