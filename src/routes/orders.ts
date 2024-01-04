@@ -4,15 +4,15 @@ const router = express.Router();
 router.use(express.json());
 
 router.post("/", (req: Request, res: Response) => {
-  res.json("장바구니 담기");
+  res.json("주문 하기");
 });
 
 router.get("/,", (req: Request, res: Response) => {
-  res.json("장바구니 조회");
+  res.json("주문 목록 조회");
 });
 
 router.delete("/:id,", (req: Request, res: Response) => {
-  res.json("장바구니 도서 삭제");
+  res.json("주문 상세상품 조회");
 });
 
 module.exports = router;
