@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const connection = mariadb.createConnection({
-  host: "127.0.0.1",
-  user: "root",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: "Bookshop",
+  database: process.env.DATABASE,
   dateStrings: true,
 });
 
