@@ -4,6 +4,7 @@ import conn from "../database/mariadb";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import { RowDataPacket, ResultSetHeader } from "mysql2";
 dotenv.config();
 
 const join = (req: Request, res: Response) => {
@@ -30,7 +31,7 @@ const login = (req: Request, res: Response) => {
   const { email, password } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";
 
-  conn.query(sql, email, (err, results: any) => {
+  conn.query(sql, email, (err, results: RowDataPacket[]) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
@@ -61,7 +62,7 @@ const passwordResetRequest = (req: Request, res: Response) => {
   const { email } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";
 
-  conn.query(sql, email, (err, results: any) => {
+  conn.query(sql, email, (err, results: RowDataPacket[]) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
@@ -86,13 +87,13 @@ const passwordReset = (req: Request, res: Response) => {
     .toString("base64");
   const values = [hashPassword, salt, email];
 
-  conn.query(sql, values, (err, results: any) => {
+  conn.query(sql, values, (err, results: ResultSetHeader[]) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
 
-    if (results.affectedRows === 0) {
+    if (results[0].affectedRows === 0) {
       return res.status(StatusCodes.NOT_FOUND).end();
     } else {
       return res.status(StatusCodes.OK).json(results);
