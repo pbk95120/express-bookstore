@@ -2,26 +2,31 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import conn from "../database/mariadb";
 import { RowDataPacket } from "mysql2";
+import { Book } from "../types/book";
 
 const allBooks = (req: Request, res: Response) => {
-  const { category_id, news } = req.query;
+  const { category_id, news, limit, currentPage }: Book = req.query;
+
+  const offset = Number(limit) * (Number(currentPage) - 1);
   let sql = "SELECT * FROM books";
-  let values = [];
+  let values: (number | string | boolean)[] = [];
 
   if (category_id && news) {
     sql +=
       " WHERE category_id=? AND pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()";
-    values = [category_id, news];
+    values = [category_id];
   } else if (category_id) {
     sql += " WHERE category_id=?";
     values = [category_id];
   } else if (news) {
     sql +=
       " WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()";
-    values = [news];
   }
 
-  conn.query(sql, category_id, (err, results: RowDataPacket[]) => {
+  sql += " LIMIT ? OFFSET ?";
+  values.push(Number(limit), Number(offset));
+
+  conn.query(sql, values, (err, results: RowDataPacket[]) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
