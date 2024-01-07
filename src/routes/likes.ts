@@ -1,14 +1,10 @@
 import express, { Request, Response, Router } from "express";
+import { addLike, deleteLike } from "../controller/LikeController";
 const router = express.Router();
 
 router.use(express.json());
 
-router.post("/:id", (req: Request, res: Response) => {
-  res.json("좋아요 추가");
-});
-
-router.delete("/:id,", (req: Request, res: Response) => {
-  res.json("좋아요 삭제");
-});
+router.post("/:id", addLike);
+router.delete("/:id", deleteLike);
 
 module.exports = router;
