@@ -1,6 +1,7 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 import { addLike, deleteLike } from "../controller/LikeController";
-const router = express.Router();
+
+const router: Router = express.Router();
 
 router.use(express.json());
 

@@ -1,18 +1,16 @@
-import express, { Request, Response, Router } from "express";
-const router = express.Router();
+import express, { Router } from "express";
+import {
+  addToCart,
+  getCartItems,
+  deleteCartItem,
+} from "../controller/CartController";
+
+const router: Router = express.Router();
 
 router.use(express.json());
 
-router.post("/", (req: Request, res: Response) => {
-  res.json("장바구니 담기");
-});
-
-router.get("/,", (req: Request, res: Response) => {
-  res.json("장바구니 조회");
-});
-
-router.delete("/:id,", (req: Request, res: Response) => {
-  res.json("장바구니 도서 삭제");
-});
+router.post("/", addToCart);
+router.get("/", getCartItems);
+router.delete("/:id", deleteCartItem);
 
 module.exports = router;
