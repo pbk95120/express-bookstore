@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import conn from "../database/mariadb";
+import conn from "../database/mariadb.js";
 import { RowDataPacket } from "mysql2";
 
 const allCategories = (req: Request, res: Response) => {

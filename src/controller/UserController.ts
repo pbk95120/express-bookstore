@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import conn from "../database/mariadb";
+import conn from "../database/mariadb.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import dotenv from "dotenv";
-import { RowDataPacket, ResultSetHeader } from "mysql2";
+import { RowDataPacket } from "mysql2";
 dotenv.config();
 
 const join = (req: Request, res: Response) => {
@@ -80,20 +80,20 @@ const passwordResetRequest = (req: Request, res: Response) => {
 
 const passwordReset = (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const sql = "UPDATE users SET password = ?, salt = ? WHERE email = ?";
+  const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
   const salt = crypto.randomBytes(10).toString("base64");
   const hashPassword = crypto
-    .pbkdf2Sync(password, salt, 100000, 10, "sha512")
+    .pbkdf2Sync(password, salt, 10000, 10, "sha512")
     .toString("base64");
   const values = [hashPassword, salt, email];
 
-  conn.query(sql, values, (err, results: ResultSetHeader[]) => {
+  conn.query(sql, values, (err, results: any) => {
     if (err) {
       console.log(err);
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
 
-    if (results[0].affectedRows === 0) {
+    if (results.affectedRows === 0) {
       return res.status(StatusCodes.NOT_FOUND).end();
     } else {
       return res.status(StatusCodes.OK).json(results);

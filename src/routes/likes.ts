@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { addLike, deleteLike } from "../controller/LikeController";
+import { addLike, deleteLike } from "../controller/LikeController.js";
 
 const router: Router = express.Router();
 
@@ -8,4 +8,4 @@ router.use(express.json());
 router.post("/:id", addLike);
 router.delete("/:id", deleteLike);
 
-module.exports = router;
+export default router;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import conn from "../database/mariadb";
+import conn from "../database/mariadb.js";
 
 const addLike = (req: Request, res: Response) => {
   const { id } = req.params;

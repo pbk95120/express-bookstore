@@ -4,15 +4,15 @@ import {
   login,
   passwordResetRequest,
   passwordReset,
-} from "../controller/UserController";
+} from "../controller/UserController.js";
 
-const router: Router = express.Router();
+const userRouter: Router = express.Router();
 
-router.use(express.json());
+userRouter.use(express.json());
 
-router.post("/join", join);
-router.post("/login", login);
-router.post("/reset", passwordResetRequest);
-router.put("/reset", passwordReset);
+userRouter.post("/join", join);
+userRouter.post("/login", login);
+userRouter.post("/reset", passwordResetRequest);
+userRouter.put("/reset", passwordReset);
 
-module.exports = router;
+export default userRouter;
