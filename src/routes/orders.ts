@@ -11,6 +11,6 @@ router.use(express.json());
 
 router.post("/", order);
 router.get("/", getOrders);
-router.delete("/:id", getOrderDetail);
+router.get("/:id", getOrderDetail);
 
 export default router;
