@@ -36,9 +36,10 @@ const addToCart = (req: Request, res: Response): void => {
  * @param {Response} res 서버 응답
  * @return void
  */
-const getCartItems = (req: Request, res: Response): void => {
+const getCartItems = (req: Request, res: Response) => {
   const { selected_id } = req.body;
   const decodedJwt = getDecodedJwt(req, res) as jwt.JwtPayload;
+
   const sql =
     "SELECT cartItems.id, book_id, title, summary, quantity, price FROM cartItems LEFT JOIN books ON cartItems.book_id = books.id WHERE user_id = ? AND cartItems.id In (?)";
 

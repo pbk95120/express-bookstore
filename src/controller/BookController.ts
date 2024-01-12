@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import conn from "../database/mariadb.js";
 import { RowDataPacket } from "mysql2";
-import { Book } from "../types/book";
+import { Book } from "@/types";
 
 const allBooks = (req: Request, res: Response) => {
   const { category_id, news, limit, currentPage }: Book = req.query;

@@ -48,7 +48,7 @@ const login = (req: Request, res: Response) => {
           email: loginUser.email,
         },
         process.env.PRIVATE_KEY || "",
-        { expiresIn: "5m", issuer: "park" }
+        { expiresIn: "30m", issuer: "park" }
       );
 
       res.cookie("token", token, { httpOnly: true });

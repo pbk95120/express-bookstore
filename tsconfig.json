@@ -9,7 +9,11 @@
     "sourceMap": true,
     "target": "es2022",
     "types": ["node"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/types/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
