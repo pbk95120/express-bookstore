@@ -1,4 +1,5 @@
 import conn from "../database/mariadb.js";
+import getDecodedJwt from "../utils/getDecodedJwt.js";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
@@ -35,7 +36,7 @@ const addLike = (req: Request, res: Response): void => {
  * @param {Response} res 서버 응답
  * @return void
  */
-const deleteLike = (req: Request, res: Response) => {
+const deleteLike = (req: Request, res: Response): void => {
   const book_id = req.params.id;
   const decodedJwt = getDecodedJwt(req, res) as jwt.JwtPayload;
 
@@ -48,28 +49,6 @@ const deleteLike = (req: Request, res: Response) => {
     }
     return res.status(StatusCodes.OK).json(result);
   });
-};
-
-/**
- * decoded 된 jwt를 반환하는 함수
- *
- * @param {Request} req 클라이언트 요청
- * @return {number} decoded 된 jwt
- */
-const getDecodedJwt = (
-  req: Request,
-  res: Response
-): string | jwt.JwtPayload => {
-  const receivedJwt: string | undefined = req.headers["authorization"];
-  if (!receivedJwt) return res.status(StatusCodes.BAD_REQUEST).end();
-
-  const decodedJwt = jwt.verify(
-    receivedJwt,
-    process.env.PRIVATE_KEY as jwt.Secret
-  );
-  if (!decodedJwt) return res.status(StatusCodes.BAD_REQUEST).end();
-
-  return decodedJwt;
 };
 
 export { addLike, deleteLike };
