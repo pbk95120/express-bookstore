@@ -1,13 +1,24 @@
+import conn from "../database/mariadb.js";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import conn from "../database/mariadb.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-const addLike = (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { user_id } = req.body;
+/**
+ * 책의 좋아요 버튼을 누르는 post API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
+const addLike = (req: Request, res: Response): void => {
+  const book_id = req.params.id;
+  const decodedJwt = getDecodedJwt(req, res) as jwt.JwtPayload;
 
   const sql = "INSERT INTO likes (user_id, liked_book_id) VALUES (?, ?)";
-  const values = [user_id, id];
+  const values = [decodedJwt.id, book_id];
+
   conn.query(sql, values, (err, result) => {
     if (err) {
       console.log(err);
@@ -17,12 +28,19 @@ const addLike = (req: Request, res: Response) => {
   });
 };
 
+/**
+ * 책의 좋아요 버튼을 삭제하는 delete API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const deleteLike = (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { user_id } = req.body;
+  const book_id = req.params.id;
+  const decodedJwt = getDecodedJwt(req, res) as jwt.JwtPayload;
 
   const sql = "DELETE FROM likes WHERE user_id=? AND liked_book_id=?";
-  const values = [user_id, id];
+  const values = [decodedJwt.id, book_id];
   conn.query(sql, values, (err, result) => {
     if (err) {
       console.log(err);
@@ -30,6 +48,28 @@ const deleteLike = (req: Request, res: Response) => {
     }
     return res.status(StatusCodes.OK).json(result);
   });
+};
+
+/**
+ * decoded 된 jwt를 반환하는 함수
+ *
+ * @param {Request} req 클라이언트 요청
+ * @return {number} decoded 된 jwt
+ */
+const getDecodedJwt = (
+  req: Request,
+  res: Response
+): string | jwt.JwtPayload => {
+  const receivedJwt: string | undefined = req.headers["authorization"];
+  if (!receivedJwt) return res.status(StatusCodes.BAD_REQUEST).end();
+
+  const decodedJwt = jwt.verify(
+    receivedJwt,
+    process.env.PRIVATE_KEY as jwt.Secret
+  );
+  if (!decodedJwt) return res.status(StatusCodes.BAD_REQUEST).end();
+
+  return decodedJwt;
 };
 
 export { addLike, deleteLike };

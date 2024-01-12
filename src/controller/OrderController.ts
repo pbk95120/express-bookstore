@@ -1,6 +1,6 @@
+import mariadb from "mysql2/promise";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import mariadb from "mysql2/promise";
 import { Item } from "../types/order";
 import dotenv from "dotenv";
 dotenv.config();
