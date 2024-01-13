@@ -5,12 +5,12 @@ import {
   deleteCartItem,
 } from "../controller/CartController.js";
 
-const router: Router = express.Router();
+const cartRouter: Router = express.Router();
 
-router.use(express.json());
+cartRouter.use(express.json());
 
-router.post("/", addToCart);
-router.get("/", getCartItems);
-router.delete("/:id", deleteCartItem);
+cartRouter.post("/", addToCart);
+cartRouter.get("/", getCartItems);
+cartRouter.delete("/:id", deleteCartItem);
 
-export default router;
+export default cartRouter;

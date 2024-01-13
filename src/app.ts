@@ -6,6 +6,7 @@ import categoryRouter from "./routes/categories.js";
 import likeRouter from "./routes/likes.js";
 import cartRouter from "./routes/carts.js";
 import orderRouter from "./routes/orders.js";
+import reviewRoute from "./routes/reviews.js";
 
 dotenv.config();
 
@@ -23,5 +24,6 @@ app.use("/categories", categoryRouter);
 app.use("/likes", likeRouter);
 app.use("/carts", cartRouter);
 app.use("/orders", orderRouter);
+app.use("/reviews", reviewRoute);
 
 export default app;

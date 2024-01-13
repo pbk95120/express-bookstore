@@ -1,8 +1,12 @@
+import conn from "../database/mariadb.js";
+import getDecodedJwt from "../utils/getDecodedJwt.js";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import conn from "../database/mariadb.js";
 import { RowDataPacket } from "mysql2";
 import { Book } from "@/types";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const allBooks = (req: Request, res: Response) => {
   const { category_id, news, limit, currentPage }: Book = req.query;
@@ -62,22 +66,5 @@ const bookDetail = (req: Request, res: Response) => {
     }
   });
 };
-
-// const booksByCategory = (req: Request, res: Response) => {
-//   const { category_id } = req.params;
-//   const sql = "SELECT * FROM books category_id = ?";
-
-//   conn.query(sql, category_id, (err, results: RowDataPacket[]) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(StatusCodes.BAD_REQUEST).end();
-//     }
-
-//     if (results.length) {
-//       return res.status(StatusCodes.OK).json(results);
-//     }
-//     return res.status(StatusCodes.NOT_FOUND).end();
-//   });
-// };
 
 export { allBooks, bookDetail };

@@ -1,11 +1,11 @@
 import express, { Router } from "express";
 import { allBooks, bookDetail } from "../controller/BookController.js";
 
-const router: Router = express.Router();
+const bookRouter: Router = express.Router();
 
-router.use(express.json());
+bookRouter.use(express.json());
 
-router.get("/", allBooks);
-router.get("/:id", bookDetail);
+bookRouter.get("/", allBooks);
+bookRouter.get("/:id", bookDetail);
 
-export default router;
+export default bookRouter;

@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import { allCategories } from "../controller/CategoryController.js";
 
-const router: Router = express.Router();
+const categoryRouter: Router = express.Router();
 
-router.use(express.json());
+categoryRouter.use(express.json());
 
-router.get("/", allCategories);
+categoryRouter.get("/", allCategories);
 
-export default router;
+export default categoryRouter;

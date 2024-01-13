@@ -5,12 +5,12 @@ import {
   getOrderDetail,
 } from "../controller/OrderController.js";
 
-const router = express.Router();
+const orderRouter = express.Router();
 
-router.use(express.json());
+orderRouter.use(express.json());
 
-router.post("/", order);
-router.get("/", getOrders);
-router.get("/:id", getOrderDetail);
+orderRouter.post("/", order);
+orderRouter.get("/", getOrders);
+orderRouter.get("/:id", getOrderDetail);
 
-export default router;
+export default orderRouter;
