@@ -1,7 +1,17 @@
 import express, { Request, Response, Router } from "express";
+import {
+  addReview,
+  getReviews,
+  deleteReview,
+  modifyReview,
+} from "../controller/ReviewController.js";
+const reviewRouter = express.Router();
 
-const router = express.Router();
+reviewRouter.use(express.json());
 
-router.use(express.json());
+reviewRouter.post("/:id", addReview);
+reviewRouter.get("/:id", getReviews);
+reviewRouter.delete("/:id", deleteReview);
+reviewRouter.put("/:id", modifyReview);
 
-export default router;
+export default reviewRouter;
