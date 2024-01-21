@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { Item } from "@/types";
 import dotenv from "dotenv";
 dotenv.config();
-import connection from "src/database/mariadb.js";
+
 const order = async (req: Request, res: Response) => {
   const conn = await mariadb.createConnection({
     host: process.env.DB_HOST,

@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { RowDataPacket } from "mysql2";
 import { Book } from "@/types";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
