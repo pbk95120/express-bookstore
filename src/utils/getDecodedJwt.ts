@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { DecodedJwt, receivedJwt } from "@/types";
+import { DecodedJwt, ReceivedJwt } from "@/types";
 
 /**
  * decoded 된 jwt를 반환하는 함수
@@ -11,27 +11,27 @@ import { DecodedJwt, receivedJwt } from "@/types";
  */
 const getDecodedJwt = (req: Request, res: Response): DecodedJwt => {
   try {
-    const receivedJwt: receivedJwt = req.headers["authorization"];
-    if (!receivedJwt) return res.status(StatusCodes.BAD_REQUEST).end();
+    const receivedJwt: ReceivedJwt = req.headers["authorization"];
+    if (receivedJwt && typeof receivedJwt === "string") {
+      const decodedJwt = jwt.verify(
+        receivedJwt,
+        process.env.PRIVATE_KEY as jwt.Secret
+      );
 
-    const decodedJwt = jwt.verify(
-      receivedJwt,
-      process.env.PRIVATE_KEY as jwt.Secret
-    );
+      if (decodedJwt instanceof jwt.TokenExpiredError) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+          message: "expired token",
+        });
+      }
 
-    if (decodedJwt instanceof jwt.TokenExpiredError) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: "expired token",
-      });
+      if (decodedJwt instanceof jwt.JsonWebTokenError) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+          message: "invalid token",
+        });
+      }
+
+      return decodedJwt;
     }
-
-    if (decodedJwt instanceof jwt.JsonWebTokenError) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: "invalid token",
-      });
-    }
-
-    return decodedJwt;
   } catch (err) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       message: "invalid token",

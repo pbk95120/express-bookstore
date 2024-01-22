@@ -5,6 +5,13 @@ import { Item } from "@/types";
 import dotenv from "dotenv";
 dotenv.config();
 
+/**
+ * 주문을 추가하는 post API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const order = async (req: Request, res: Response) => {
   const conn = await mariadb.createConnection({
     host: process.env.DB_HOST,
@@ -43,6 +50,13 @@ const order = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json(results[0]);
 };
 
+/**
+ * 주문 목록을 조회하는 get API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const getOrders = async (req: Request, res: Response) => {
   const conn = await mariadb.createConnection({
     host: process.env.DB_HOST,
@@ -58,6 +72,13 @@ const getOrders = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json(rows);
 };
 
+/**
+ * 주문 상세 목록을 조회하는 get API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const getOrderDetail = async (req: Request, res: Response) => {
   const { id } = req.params;
   const conn = await mariadb.createConnection({

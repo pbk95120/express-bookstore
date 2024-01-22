@@ -7,6 +7,13 @@ import { Book } from "@/types";
 import dotenv from "dotenv";
 dotenv.config();
 
+/**
+ * 전체 도서를 조회하는 get API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const allBooks = (req: Request, res: Response) => {
   const { category_id, news, limit, currentPage }: Book = req.query;
 
@@ -43,6 +50,13 @@ const allBooks = (req: Request, res: Response) => {
   });
 };
 
+/**
+ * 상세 도서를 조회하는 get API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const bookDetail = (req: Request, res: Response) => {
   const book_id = req.params.id;
   const { user_id } = req.body;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export type receivedJwt = string | undefined;
+export type ReceivedJwt = string | undefined;
 export type DecodedJwt = string | jwt.JwtPayload | void;
 
 export interface Book {

@@ -7,6 +7,13 @@ import dotenv from "dotenv";
 import { RowDataPacket } from "mysql2";
 dotenv.config();
 
+/**
+ * 로그인 요청을 하는 post API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const join = (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -60,6 +67,13 @@ const login = (req: Request, res: Response) => {
   });
 };
 
+/**
+ * 비밀번호 초기화 요청을 하는 post API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const passwordResetRequest = (req: Request, res: Response) => {
   const { email } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";
@@ -80,6 +94,13 @@ const passwordResetRequest = (req: Request, res: Response) => {
   });
 };
 
+/**
+ * 비밀번호 초기화를 하는 put API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const passwordReset = (req: Request, res: Response) => {
   const { email, password } = req.body;
   const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
