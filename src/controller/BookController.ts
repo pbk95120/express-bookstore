@@ -3,7 +3,7 @@ import getDecodedJwt from "../utils/getDecodedJwt.js";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { RowDataPacket } from "mysql2";
-import { Book } from "@/types";
+import { AllBooksProps, Book, Pagination } from "@/types";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -15,6 +15,7 @@ dotenv.config();
  * @return void
  */
 const allBooks = (req: Request, res: Response) => {
+  let allBooks: AllBooksProps = { books: [], pagination: 0 };
   const { category_id, news, limit, currentPage }: Book = req.query;
 
   const offset = Number(limit) * (Number(currentPage) - 1);
@@ -30,7 +31,7 @@ const allBooks = (req: Request, res: Response) => {
     values = [category_id];
   } else if (news) {
     sql +=
-      " WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()";
+      " WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 3 MONTH) AND NOW()";
   }
 
   sql += " LIMIT ? OFFSET ?";
@@ -42,8 +43,14 @@ const allBooks = (req: Request, res: Response) => {
       return res.status(StatusCodes.BAD_REQUEST).end();
     }
 
+    allBooks.books = results;
+    let pagination: Pagination = { currentPage: 0, totalCount: 0 };
+    pagination.currentPage = Number(currentPage);
+    pagination.totalCount = results[0]["found_rows()"];
+    allBooks.pagination = Number(pagination);
+
     if (results.length) {
-      return res.status(StatusCodes.OK).json(results);
+      return res.status(StatusCodes.OK).json(allBooks);
     } else {
       return res.status(StatusCodes.NOT_FOUND).end();
     }

@@ -59,8 +59,13 @@ const login = (req: Request, res: Response) => {
       );
 
       res.cookie("token", token, { httpOnly: true });
-      console.log(token);
-      return res.status(StatusCodes.OK).json(results);
+
+      const responseData = {
+        user: results[0],
+        token: token,
+      };
+
+      return res.status(StatusCodes.OK).json(responseData);
     } else {
       return res.status(StatusCodes.UNAUTHORIZED).end();
     }

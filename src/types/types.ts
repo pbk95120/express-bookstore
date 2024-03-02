@@ -14,3 +14,13 @@ export interface Item {
   book_id: number;
   quantity: number;
 }
+
+export interface AllBooksProps {
+  books: any;
+  pagination: number;
+}
+
+export interface Pagination {
+  currentPage: number;
+  totalCount: number;
+}

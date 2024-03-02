@@ -7,17 +7,14 @@ import likeRouter from "./routes/likes.js";
 import cartRouter from "./routes/carts.js";
 import orderRouter from "./routes/orders.js";
 import reviewRoute from "./routes/reviews.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
 app.listen(process.env.PORT, () => console.log("Server is running"));
-
+app.use(cors());
 app.use("/users", userRouter);
 app.use("/books", bookRouter);
 app.use("/categories", categoryRouter);
