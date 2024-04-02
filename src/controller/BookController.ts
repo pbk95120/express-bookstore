@@ -15,11 +15,14 @@ dotenv.config();
  * @return void
  */
 const allBooks = (req: Request, res: Response) => {
-  let allBooks: AllBooksProps = { books: [], pagination: 0 };
+  let allBooks: AllBooksProps = {
+    books: [],
+    pagination: { currentPage: 0, totalCount: 0 },
+  };
   const { category_id, news, limit, currentPage }: Book = req.query;
 
   const offset = Number(limit) * (Number(currentPage) - 1);
-  let sql = "SELECT * FROM books";
+  let sql = `SELECT SQL_CALC_FOUND_ROWS *,(SELECT count(*) FROM likes WHERE books.id=liked_book_id) AS likes FROM books`;
   let values: (number | string | boolean)[] = [];
 
   if (category_id && news) {
@@ -30,8 +33,7 @@ const allBooks = (req: Request, res: Response) => {
     sql += " WHERE category_id=?";
     values = [category_id];
   } else if (news) {
-    sql +=
-      " WHERE pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 3 MONTH) AND NOW()";
+    sql += " WHERE pubDate BETWEEN DATE_SUB(NOW(), INTERVAL 3 MONTH) AND NOW()";
   }
 
   sql += " LIMIT ? OFFSET ?";
@@ -44,10 +46,10 @@ const allBooks = (req: Request, res: Response) => {
     }
 
     allBooks.books = results;
-    let pagination: Pagination = { currentPage: 0, totalCount: 0 };
+    let pagination = { currentPage: 0, totalCount: 0 };
     pagination.currentPage = Number(currentPage);
-    pagination.totalCount = results[0]["found_rows()"];
-    allBooks.pagination = Number(pagination);
+    pagination.totalCount = results.length;
+    allBooks.pagination = pagination;
 
     if (results.length) {
       return res.status(StatusCodes.OK).json(allBooks);

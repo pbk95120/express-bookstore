@@ -8,7 +8,7 @@ import { RowDataPacket } from "mysql2";
 dotenv.config();
 
 /**
- * 로그인 요청을 하는 post API
+ * 회원가입 요청을 하는 post API
  *
  * @param {Request} req 클라이언트 요청
  * @param {Response} res 서버 응답
@@ -34,6 +34,13 @@ const join = (req: Request, res: Response) => {
   });
 };
 
+/**
+ * 로그인 요청을 하는 post API
+ *
+ * @param {Request} req 클라이언트 요청
+ * @param {Response} res 서버 응답
+ * @return void
+ */
 const login = (req: Request, res: Response) => {
   const { email, password } = req.body;
   const sql = "SELECT * FROM users WHERE email = ?";

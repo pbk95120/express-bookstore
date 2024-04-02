@@ -17,7 +17,7 @@ export interface Item {
 
 export interface AllBooksProps {
   books: any;
-  pagination: number;
+  pagination: Pagination;
 }
 
 export interface Pagination {
